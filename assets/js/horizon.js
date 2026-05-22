@@ -28,6 +28,17 @@
       var text = p.textContent.trim();
       if (/^(Tags|标签)\s*:/.test(text)) {
         p.classList.add('tag-line');
+        // Parse tags: "标签: #AI, #Cloud Computing, ..." → styled badges
+        var tagContent = text.replace(/^(Tags|标签)\s*:\s*/, '');
+        var tags = tagContent.split(',').map(function (t) { return t.trim(); }).filter(Boolean);
+        if (tags.length > 0) {
+          var html = '<span class="tag-label">标签:</span> ';
+          html += tags.map(function (tag) {
+            var clean = tag.replace(/^#/, '');
+            return '<span class="tag-badge">' + clean + '</span>';
+          }).join('');
+          p.innerHTML = html;
+        }
         return;
       }
       if (/^(rss|reddit|github|hackernews|hn|telegram|ossinsight)\s*·/i.test(text)) {
@@ -174,11 +185,14 @@
     originalTOC.classList.add('hz-original-toc');
     contentArea.appendChild(originalTOC);
 
-    // 3. Cards
-    cards.forEach(function (group) {
+    // 3. Cards — add item-N anchor id to H2 for TOC jump
+    cards.forEach(function (group, idx) {
       var card = document.createElement('div');
       card.className = 'hz-item-card';
       group.forEach(function (el) { card.appendChild(el); });
+      // Set card id to item-N for TOC anchor navigation
+      var itemId = 'item-' + (idx + 1);
+      card.id = itemId;
       contentArea.appendChild(card);
     });
 

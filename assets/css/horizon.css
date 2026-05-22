@@ -238,19 +238,46 @@ body.hz-has-toc .main-content {
 .score-badge[data-tier="mid"]  { background: #d4a017; }
 .score-badge[data-tier="low"]  { background: #7c7891; }
 
-/* Tag Pills */
-.tag-line code {
+/* Tag Badges */
+.tag-line {
+  margin: 10px 0 4px 0 !important;
+  line-height: 2;
+}
+
+.tag-label {
+  font-size: 0.82em;
+  font-weight: 600;
+  color: var(--hz-text-muted);
+}
+
+.tag-badge {
+  display: inline-block;
+  padding: 0.15em 0.6em;
   border-radius: 3px;
-  padding: 0.1em 0.5em;
-  font-size: 0.8em;
-  background: var(--hz-accent) !important;
+  font-size: 0.78em;
+  font-weight: 500;
+  background: var(--hz-surface);
+  color: var(--hz-accent) !important;
+  border: 1px solid var(--hz-border);
+  margin: 0 0 0 4px;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+
+.tag-badge:hover {
+  background: var(--hz-accent);
   color: #fff !important;
 }
 
 @media (prefers-color-scheme: dark) {
-  .tag-line code {
-    background: #342f4a !important;
+  .tag-badge {
+    background: #2a2540;
     color: #f0a848 !important;
+    border-color: #3d375a;
+  }
+  .tag-badge:hover {
+    background: #f0a848;
+    color: #1a1726 !important;
   }
 }
 
