@@ -69,44 +69,7 @@
       tocItems.push({ href: href, title: title, score: scoreVal, tier: tier });
     });
 
-    // ---- Wrap article items in cards ----
-    // DOM: OL(TOC) → HR → P(empty) → H2(title+link) → content... → HR → P(empty) → H2 → ...
-    var children = Array.from(mainContent.children);
-    var groups = [];
-    var currentGroup = null;
-    var pastTOC = false;
-
-    for (var i = 0; i < children.length; i++) {
-      var child = children[i];
-
-      if (child === originalTOC) { pastTOC = true; continue; }
-      if (!pastTOC) continue;
-
-      if (child.tagName === 'HR') {
-        if (currentGroup) { groups.push(currentGroup); currentGroup = null; }
-        continue;
-      }
-
-      var isArticleH2 = child.tagName === 'H2' && child.querySelector('a[href^="http"]');
-
-      if (isArticleH2) {
-        if (currentGroup) groups.push(currentGroup);
-        currentGroup = [child];
-      } else if (currentGroup) {
-        if (currentGroup.length === 0 && child.tagName === 'P' && child.textContent.trim() === '') continue;
-        currentGroup.push(child);
-      }
-    }
-    if (currentGroup) groups.push(currentGroup);
-
-    groups.forEach(function (group) {
-      var card = document.createElement('div');
-      card.className = 'hz-item-card';
-      group.forEach(function (el) { card.appendChild(el); });
-      mainContent.appendChild(card);
-    });
-
-    // ---- Build layout ----
+    // ---- Build sidebar + layout FIRST (before modifying children) ----
     var layout = document.createElement('div');
     layout.className = 'hz-layout';
 
@@ -144,12 +107,90 @@
     var contentArea = document.createElement('div');
     contentArea.className = 'hz-content';
 
-    originalTOC.classList.add('hz-original-toc');
-    while (mainContent.firstChild) contentArea.appendChild(mainContent.firstChild);
+    // ---- Scan mainContent children and build cards ----
+    // Jekyll DOM order: blockquote → hr → ol(TOC) → hr → [P(anchor) → H2 → content... → hr] × N → footer
+    var children = Array.from(mainContent.children);
+    var tocIndex = children.indexOf(originalTOC);
+    var footerEl = mainContent.querySelector('.site-footer');
 
+    // Elements before TOC (blockquote, hr) → keep as-is in contentArea
+    var headerElements = [];
+    var itemElements = [];  // collected elements for current card
+    var cards = [];
+    var collecting = false;
+
+    for (var i = tocIndex + 1; i < children.length; i++) {
+      var child = children[i];
+
+      // Stop at footer
+      if (child === footerEl) break;
+
+      // Skip HR separators (they delineate items, not content)
+      if (child.tagName === 'HR') {
+        // Flush current card if any
+        if (itemElements.length > 0) {
+          cards.push(itemElements);
+          itemElements = [];
+        }
+        continue;
+      }
+
+      // Skip empty P that only contains an anchor <a id="item-N"></a>
+      if (child.tagName === 'P' && child.textContent.trim() === '') {
+        continue;
+      }
+
+      // Detect article H2 (contains external link)
+      var isArticleH2 = child.tagName === 'H2' && child.querySelector('a[href^="http"]');
+
+      if (isArticleH2) {
+        // Flush previous card
+        if (itemElements.length > 0) {
+          cards.push(itemElements);
+          itemElements = [];
+        }
+        itemElements.push(child);
+        collecting = true;
+      } else if (collecting) {
+        // Content belonging to current article
+        itemElements.push(child);
+      }
+      // Elements between TOC and first H2 (shouldn't exist normally) are ignored
+    }
+    // Flush last card
+    if (itemElements.length > 0) {
+      cards.push(itemElements);
+    }
+
+    // ---- Assemble contentArea ----
+    // 1. Header elements (blockquote)
+    for (var h = 0; h < tocIndex; h++) {
+      if (children[h].tagName !== 'HR') {
+        contentArea.appendChild(children[h]);
+      }
+    }
+
+    // 2. Hidden original TOC
+    originalTOC.classList.add('hz-original-toc');
+    contentArea.appendChild(originalTOC);
+
+    // 3. Cards
+    cards.forEach(function (group) {
+      var card = document.createElement('div');
+      card.className = 'hz-item-card';
+      group.forEach(function (el) { card.appendChild(el); });
+      contentArea.appendChild(card);
+    });
+
+    // 4. Footer stays in mainContent (outside layout)
+    // layout = sidebar + contentArea
     layout.appendChild(sidebar);
     layout.appendChild(contentArea);
+
+    // Clear mainContent and rebuild: layout + footer
+    while (mainContent.firstChild) mainContent.removeChild(mainContent.firstChild);
     mainContent.appendChild(layout);
+    if (footerEl) mainContent.appendChild(footerEl);
 
     // Mobile toggle
     var toggleBtn = document.createElement('button');
