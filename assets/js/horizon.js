@@ -169,14 +169,16 @@
     originalTOC.classList.add('hz-original-toc');
     contentArea.appendChild(originalTOC);
 
-    // 3. Cards — add item-N anchor id to H2 for TOC jump
+    // 3. Cards — fallback: if H2 lacks id="item-N" (old articles), set it on the card
     cards.forEach(function (group, idx) {
       var card = document.createElement('div');
       card.className = 'hz-item-card';
       group.forEach(function (el) { card.appendChild(el); });
-      // Set card id to item-N for TOC anchor navigation
       var itemId = 'item-' + (idx + 1);
-      card.id = itemId;
+      var h2 = card.querySelector('h2');
+      if (!h2 || h2.id !== itemId) {
+        card.id = itemId;
+      }
       contentArea.appendChild(card);
     });
 
