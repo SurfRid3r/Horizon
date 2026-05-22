@@ -204,8 +204,7 @@ class DailySummarizer:
                 source_line += f' · [{labels["discussion"]}]({discussion_url})'
 
         lines = [
-            f'<a id="item-{index}"></a>',
-            f"## [{title}]({url}) \u2b50\ufe0f {score}/10",  # ⭐️
+            f"## [{title}]({url}) {{: #\"item-{index}\" }} ⭐️ {score}/10",
             "",
             summary,
             "",
