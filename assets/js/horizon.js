@@ -39,26 +39,43 @@
 
   // ====== SIDEBAR TOC ======
   function buildSidebarTOC() {
-    // Only run on article pages (have the ordered TOC list)
     var mainContent = document.querySelector('.main-content');
     if (!mainContent) return;
 
-    // Find the original TOC: the first <ol> after the blockquote+hr
+    // Find the original TOC <ol>
     var originalTOC = mainContent.querySelector('ol');
     if (!originalTOC) return;
 
-    // Check it has links to #item- anchors
     var tocLinks = originalTOC.querySelectorAll('a[href^="#item-"]');
     if (tocLinks.length < 3) return;
 
-    // Mark body for layout
     document.body.classList.add('hz-has-toc');
 
-    // Create layout wrapper
+    // Collect TOC items first (before DOM manipulation)
+    var tocItems = [];
+    tocLinks.forEach(function (link) {
+      var text = link.textContent;
+      var href = link.getAttribute('href');
+      var scoreMatch = text.match(/(\d+(?:\.\d+)?)$/);
+      var score = scoreMatch ? parseFloat(scoreMatch[1]) : null;
+      var title = text.replace(/\s*\d+(?:\.\d+)?$/, '').trim();
+      var tier = 'low';
+      if (score !== null) {
+        if (score >= 9) tier = 'high';
+        else if (score >= 7) tier = 'good';
+        else if (score >= 5) tier = 'mid';
+      }
+      tocItems.push({ href: href, title: title, score: scoreMatch ? scoreMatch[1] : null, tier: tier });
+    });
+
+    // ---- Wrap article items in cards ----
+    wrapItemsInCards(mainContent);
+
+    // ---- Build layout structure ----
     var layout = document.createElement('div');
     layout.className = 'hz-layout';
 
-    // Create sidebar
+    // Sidebar
     var sidebar = document.createElement('aside');
     sidebar.className = 'hz-sidebar';
     sidebar.id = 'hz-sidebar';
@@ -71,32 +88,20 @@
     var tocList = document.createElement('ul');
     tocList.className = 'hz-toc-list';
 
-    tocLinks.forEach(function (link) {
+    tocItems.forEach(function (item) {
       var li = document.createElement('li');
       var a = document.createElement('a');
-      a.href = link.getAttribute('href');
-      a.textContent = link.textContent;
+      a.href = item.href;
 
-      // Extract score from text for color coding
-      var scoreMatch = link.textContent.match(/(\d+(?:\.\d+)?)$/);
-      if (scoreMatch) {
-        var score = parseFloat(scoreMatch[1]);
-        var tier;
-        if (score >= 9) tier = 'high';
-        else if (score >= 7) tier = 'good';
-        else if (score >= 5) tier = 'mid';
-        else tier = 'low';
-
+      if (item.score !== null) {
         var scoreSpan = document.createElement('span');
         scoreSpan.className = 'hz-toc-score score-badge';
-        scoreSpan.setAttribute('data-tier', tier);
-        scoreSpan.textContent = scoreMatch[1];
-
-        // Clean the text (remove the score part)
-        var textNode = document.createTextNode(link.textContent.replace(/\s*\d+(?:\.\d+)?$/, '') + ' ');
-        a.textContent = '';
+        scoreSpan.setAttribute('data-tier', item.tier);
+        scoreSpan.textContent = item.score;
         a.appendChild(scoreSpan);
-        a.appendChild(textNode);
+        a.appendChild(document.createTextNode(' ' + item.title));
+      } else {
+        a.textContent = item.title;
       }
 
       li.appendChild(a);
@@ -105,15 +110,12 @@
 
     sidebar.appendChild(tocList);
 
-    // Create content area
+    // Content area
     var contentArea = document.createElement('div');
     contentArea.className = 'hz-content';
 
     // Hide original TOC
     originalTOC.classList.add('hz-original-toc');
-
-    // Wrap content items in cards
-    wrapItemsInCards(mainContent);
 
     // Move all children from mainContent to contentArea
     while (mainContent.firstChild) {
@@ -124,14 +126,13 @@
     layout.appendChild(contentArea);
     mainContent.appendChild(layout);
 
-    // Mobile toggle button
+    // Mobile toggle
     var toggleBtn = document.createElement('button');
     toggleBtn.className = 'hz-sidebar-toggle';
     toggleBtn.innerHTML = '📑';
     toggleBtn.title = '目录';
     document.body.appendChild(toggleBtn);
 
-    // Mobile backdrop
     var backdrop = document.createElement('div');
     backdrop.className = 'hz-backdrop';
     backdrop.id = 'hz-backdrop';
@@ -147,7 +148,6 @@
       backdrop.classList.remove('hz-mobile-open');
     });
 
-    // Click TOC link: close mobile sidebar
     tocList.addEventListener('click', function (e) {
       if (e.target.closest('a')) {
         sidebar.classList.remove('hz-mobile-open');
@@ -155,46 +155,90 @@
       }
     });
 
-    // Scroll spy: highlight current section
+    // Scroll spy
     setupScrollSpy(tocList);
   }
 
   // ====== WRAP ITEMS IN CARDS ======
+  // Strategy: iterate mainContent children, split by <hr> or <h2> boundaries
   function wrapItemsInCards(container) {
-    // Each article item starts with <a id="item-N"></a> followed by <h2>, content, <hr>
-    var anchors = container.querySelectorAll('a[id^="item-"]');
-    anchors.forEach(function (anchor) {
+    var children = Array.from(container.children);
+
+    // Find the index of the first <h2> (article content starts here)
+    var firstH2Idx = -1;
+    for (var i = 0; i < children.length; i++) {
+      if (children[i].tagName === 'H2') { firstH2Idx = i; break; }
+    }
+    if (firstH2Idx < 0) return;
+
+    // Include the empty <p> with anchor before the first h2
+    if (firstH2Idx > 0 && children[firstH2Idx - 1].tagName === 'P') {
+      firstH2Idx--;
+    }
+
+    var articleChildren = children.slice(firstH2Idx);
+
+    // Group: each item = content between <hr> separators (or end)
+    // But we need to detect item boundaries:
+    // An item starts at an empty <p> (containing anchor) followed by <h2>, OR at an <h2> directly
+    var groups = [];
+    var currentGroup = null;
+
+    for (var j = 0; j < articleChildren.length; j++) {
+      var child = articleChildren[j];
+
+      // Skip <hr> separators — they mark boundaries
+      if (child.tagName === 'HR') {
+        if (currentGroup) {
+          groups.push(currentGroup);
+          currentGroup = null;
+        }
+        continue;
+      }
+
+      // Detect item start: <p> with only an anchor inside, followed by <h2>
+      var isEmptyAnchorP = (
+        child.tagName === 'P' &&
+        child.querySelector('a[id^="item-"]') &&
+        child.textContent.trim() === ''
+      );
+
+      // Also treat bare <h2> as item start (some items may not have anchor <p>)
+      var isItemH2 = (
+        child.tagName === 'H2' &&
+        child.querySelector('a[href^="http"]')
+      );
+
+      if (isEmptyAnchorP || isItemH2) {
+        // Start new group
+        if (currentGroup) {
+          groups.push(currentGroup);
+        }
+        currentGroup = [child];
+      } else if (currentGroup) {
+        currentGroup.push(child);
+      }
+    }
+
+    // Push last group
+    if (currentGroup) groups.push(currentGroup);
+
+    // Wrap each group in a card
+    groups.forEach(function (group) {
+      // Only wrap if the group contains an <h2> (actual article item)
+      var hasH2 = group.some(function (el) { return el.tagName === 'H2'; });
+      if (!hasH2) return;
+
       var card = document.createElement('div');
       card.className = 'hz-item-card';
 
-      // Collect siblings until next anchor or hr
-      var node = anchor;
-      var siblings = [];
-      while (node) {
-        var next = node.nextSibling;
-        siblings.push(node);
-        // Stop at <hr> that's a separator between items
-        if (node.nodeType === 1 && node.tagName === 'HR') {
-          node.parentNode.removeChild(node);
-          break;
-        }
-        // Stop if next is another item anchor
-        if (next && next.nodeType === 1 && next.tagName === 'A' && next.id && next.id.match(/^item-/)) {
-          node = next;
-          break;
-        }
-        node = next;
-      }
-
-      // Move collected nodes into card
-      siblings.forEach(function (n) {
-        // Skip the trailing <hr>
-        if (n.nodeType === 1 && n.tagName === 'HR') return;
-        card.appendChild(n);
+      group.forEach(function (el) {
+        card.appendChild(el);
       });
 
-      // Insert card where anchor was
-      anchor.parentNode.insertBefore(card, anchor);
+      // Insert card before first element of group's original position
+      // Since we already detached them, insert at container
+      container.appendChild(card);
     });
   }
 
@@ -214,13 +258,10 @@
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          // Remove active from all
           links.forEach(function (l) { l.classList.remove('hz-active'); });
-          // Add to current
           var section = sections.find(function (s) { return s.el === entry.target; });
           if (section) {
             section.link.classList.add('hz-active');
-            // Scroll sidebar to show active item
             section.link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
           }
         }
@@ -230,14 +271,10 @@
       threshold: 0
     });
 
-    sections.forEach(function (s) {
-      observer.observe(s.el);
-    });
+    sections.forEach(function (s) { observer.observe(s.el); });
 
-    // Activate first on load
-    if (sections.length) {
-      sections[0].link.classList.add('hz-active');
-    }
+    // Activate first
+    if (sections.length) sections[0].link.classList.add('hz-active');
   }
 
   // ====== LANGUAGE TOGGLE ======
@@ -255,21 +292,15 @@
 
     toggle.appendChild(btnEn);
     toggle.appendChild(btnZh);
-
     document.body.insertBefore(toggle, document.body.firstChild);
 
     var saved = null;
-    try { saved = localStorage.getItem('horizon-lang'); } catch (e) { /* noop */ }
+    try { saved = localStorage.getItem('horizon-lang'); } catch (e) {}
     var currentLang = saved === 'en' ? 'en' : 'zh';
 
     function updateButtons(lang) {
-      if (lang === 'en') {
-        btnEn.classList.add('active');
-        btnZh.classList.remove('active');
-      } else {
-        btnZh.classList.add('active');
-        btnEn.classList.remove('active');
-      }
+      btnEn.classList.toggle('active', lang === 'en');
+      btnZh.classList.toggle('active', lang === 'zh');
     }
 
     var zhSection = document.getElementById('lang-zh');
@@ -277,13 +308,8 @@
 
     function showSection(lang) {
       if (!zhSection || !enSection) return;
-      if (lang === 'en') {
-        enSection.classList.remove('hidden');
-        zhSection.classList.add('hidden');
-      } else {
-        zhSection.classList.remove('hidden');
-        enSection.classList.add('hidden');
-      }
+      enSection.classList.toggle('hidden', lang !== 'en');
+      zhSection.classList.toggle('hidden', lang !== 'zh');
     }
 
     function switchArticleLang(lang) {
@@ -300,21 +326,16 @@
     function setLang(lang) {
       currentLang = lang;
       updateButtons(lang);
-      try { localStorage.setItem('horizon-lang', lang); } catch (e) { /* noop */ }
-      if (zhSection && enSection) {
-        showSection(lang);
-      } else {
-        switchArticleLang(lang);
-      }
+      try { localStorage.setItem('horizon-lang', lang); } catch (e) {}
+      if (zhSection && enSection) showSection(lang);
+      else switchArticleLang(lang);
     }
 
     btnEn.addEventListener('click', function () { setLang('en'); });
     btnZh.addEventListener('click', function () { setLang('zh'); });
 
     updateButtons(currentLang);
-    if (zhSection && enSection) {
-      showSection(currentLang);
-    }
+    if (zhSection && enSection) showSection(currentLang);
   }
 
   // ====== INIT ======
