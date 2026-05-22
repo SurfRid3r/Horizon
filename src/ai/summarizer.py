@@ -229,9 +229,9 @@ class DailySummarizer:
             lines.append(f"**{labels['discussion']}**: {discussion}")
 
         if item.ai_tags:
-            tags_str = ", ".join([f"`#{t}`" for t in item.ai_tags])
+            tags_str = " ".join([f'<span class="tag-badge">{t}</span>' for t in item.ai_tags])
             lines.append("")
-            lines.append(f"**{labels['tags']}**: {tags_str}")
+            lines.append(f'<p class="tag-line"><span class="tag-label">{labels["tags"]}:</span> {tags_str}</p>')
 
         lines.append("")
         lines.append("---")
