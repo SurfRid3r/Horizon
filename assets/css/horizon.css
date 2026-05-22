@@ -16,6 +16,9 @@
   --hz-toc-active: var(--hz-accent);
   --hz-scrollbar-thumb: #c5c0b8;
   --hz-scrollbar-track: transparent;
+  --hz-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --hz-safe-left: env(safe-area-inset-left, 0px);
+  --hz-safe-right: env(safe-area-inset-right, 0px);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,6 +43,7 @@
 body {
   background-color: var(--hz-bg) !important;
   color: var(--hz-text) !important;
+  -webkit-text-size-adjust: 100%;
 }
 
 a { color: var(--hz-link) !important; }
@@ -47,12 +51,15 @@ a { color: var(--hz-link) !important; }
 code {
   background-color: var(--hz-code-bg) !important;
   color: var(--hz-text) !important;
+  word-break: break-word;
 }
 
 pre {
   background-color: var(--hz-code-bg) !important;
   color: var(--hz-text) !important;
   border: 1px solid var(--hz-border) !important;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 hr { border-color: var(--hz-border) !important; }
@@ -66,6 +73,8 @@ h1, h2, h3, h4, h5, h6 {
 /* Override Cayman header gradient */
 .page-header {
   background: linear-gradient(120deg, #312e81, #be185d, #f97316) !important;
+  padding-left: calc(var(--hz-safe-left) + 2rem) !important;
+  padding-right: calc(var(--hz-safe-right) + 2rem) !important;
 }
 
 .page-header h1,
@@ -356,6 +365,7 @@ body.hz-has-toc .main-content {
   font-size: 0.8em;
   cursor: pointer;
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .lang-toggle button:first-child { border-radius: 3px 0 0 3px; }
@@ -379,16 +389,20 @@ body.hz-has-toc .main-content {
   bottom: 20px;
   left: 20px;
   z-index: 1001;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: none;
   background: var(--hz-accent);
   color: #fff;
-  font-size: 1.2em;
+  font-size: 1.3em;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  transition: transform 0.15s ease;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  /* Safe area for iPhone bottom bar */
+  bottom: calc(20px + var(--hz-safe-bottom));
+  left: calc(20px + var(--hz-safe-left));
 }
 
 .hz-sidebar-toggle:hover {
@@ -396,7 +410,7 @@ body.hz-has-toc .main-content {
 }
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE — Tablet
    ============================================================ */
 
 @media (max-width: 1100px) {
@@ -409,6 +423,10 @@ body.hz-has-toc .main-content {
   }
 }
 
+/* ============================================================
+   RESPONSIVE — Mobile (<860px)
+   ============================================================ */
+
 @media (max-width: 860px) {
   /* Mobile: hide sidebar, show toggle button */
   .hz-layout {
@@ -420,19 +438,28 @@ body.hz-has-toc .main-content {
     position: fixed;
     top: 0;
     left: 0;
-    width: 300px;
-    min-width: 300px;
+    width: 85vw;
+    min-width: unset;
+    max-width: 340px;
     height: 100vh;
     max-height: 100vh;
     z-index: 2000;
     background: var(--hz-bg);
     border-right: 1px solid var(--hz-border);
-    padding: 20px 12px;
-    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+    padding: 20px 16px;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.2);
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
 
   .hz-sidebar.hz-mobile-open {
     display: block;
+    animation: hz-slide-in 0.25s ease-out;
+  }
+
+  @keyframes hz-slide-in {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(0); }
   }
 
   .hz-sidebar-toggle {
@@ -442,12 +469,103 @@ body.hz-has-toc .main-content {
   }
 
   .hz-content {
-    padding: 12px 12px 80px 12px;
+    padding: 8px 12px 80px 12px;
     max-width: 100%;
   }
 
   .hz-item-card {
     padding: 14px 16px;
+    margin: 10px 0;
+    border-radius: 10px;
+  }
+
+  .hz-item-card > h2 {
+    font-size: 1.05em !important;
+  }
+
+  /* Compact tag badges on mobile */
+  .tag-badge {
+    font-size: 0.72em;
+    padding: 0.12em 0.5em;
+  }
+
+  .tag-line {
+    line-height: 1.8;
+  }
+
+  /* Smaller header on mobile */
+  .page-header {
+    padding: 1.5rem 1rem !important;
+  }
+
+  .page-header h1 {
+    font-size: 1.3rem !important;
+  }
+
+  .page-header h2 {
+    font-size: 0.95rem !important;
+  }
+
+  /* Language toggle repositioned inside header area */
+  .lang-toggle {
+    top: auto;
+    bottom: 8px;
+    right: 12px;
+  }
+
+  .lang-toggle button {
+    font-size: 0.75em;
+    padding: 0.25em 0.8em;
+  }
+
+  /* Prevent body scroll when sidebar open */
+  body.hz-sidebar-open {
+    overflow: hidden;
+    touch-action: none;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — Small phones (<400px)
+   ============================================================ */
+
+@media (max-width: 400px) {
+  .hz-item-card {
+    padding: 12px 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+  }
+
+  .hz-item-card > h2 {
+    font-size: 0.98em !important;
+    line-height: 1.35;
+  }
+
+  .hz-content {
+    padding: 6px 8px 80px 8px;
+  }
+
+  .hz-content p {
+    font-size: 0.92em;
+    line-height: 1.55;
+  }
+
+  .score-badge {
+    font-size: 0.65em;
+    padding: 0.1em 0.4em;
+  }
+
+  .tag-badge {
+    font-size: 0.68em;
+    padding: 0.1em 0.4em;
+  }
+
+  .source-line {
+    font-size: 0.75em;
+  }
+
+  .page-header h1 {
+    font-size: 1.1rem !important;
   }
 }
 
@@ -461,10 +579,17 @@ body.hz-has-toc .main-content {
   inset: 0;
   background: rgba(0,0,0,0.4);
   z-index: 1999;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .hz-backdrop.hz-mobile-open {
   display: block;
+  animation: hz-fade-in 0.2s ease-out;
+}
+
+@keyframes hz-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ============================================================
@@ -476,11 +601,40 @@ html {
 }
 
 /* ============================================================
+   MOBILE CLOSE BUTTON (inside sidebar)
+   ============================================================ */
+
+.hz-sidebar-close {
+  display: none;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: var(--hz-surface);
+  color: var(--hz-text-muted);
+  font-size: 1.1em;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 860px) {
+  .hz-sidebar-close {
+    display: flex;
+  }
+}
+
+/* ============================================================
    PRINT STYLES
    ============================================================ */
 
 @media print {
-  .hz-sidebar, .hz-sidebar-toggle, .lang-toggle, .hz-backdrop {
+  .hz-sidebar, .hz-sidebar-toggle, .lang-toggle, .hz-backdrop, .hz-sidebar-close {
     display: none !important;
   }
   .hz-layout {

@@ -32,6 +32,23 @@
     });
   }
 
+  // ====== MOBILE HELPERS ======
+  function isMobile() {
+    return window.innerWidth <= 860;
+  }
+
+  function openSidebar(sidebar, backdrop) {
+    sidebar.classList.add('hz-mobile-open');
+    backdrop.classList.add('hz-mobile-open');
+    document.body.classList.add('hz-sidebar-open');
+  }
+
+  function closeSidebar(sidebar, backdrop) {
+    sidebar.classList.remove('hz-mobile-open');
+    backdrop.classList.remove('hz-mobile-open');
+    document.body.classList.remove('hz-sidebar-open');
+  }
+
   // ====== SIDEBAR TOC ======
   function buildSidebarTOC() {
     var mainContent = document.querySelector('.main-content');
@@ -72,6 +89,13 @@
     sidebar.className = 'hz-sidebar';
     sidebar.id = 'hz-sidebar';
 
+    // Close button (mobile)
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'hz-sidebar-close';
+    closeBtn.innerHTML = '✕';
+    closeBtn.setAttribute('aria-label', '关闭目录');
+    sidebar.appendChild(closeBtn);
+
     var sidebarTitle = document.createElement('div');
     sidebarTitle.className = 'hz-sidebar-title';
     sidebarTitle.textContent = '📑 目录';
@@ -103,26 +127,22 @@
     contentArea.className = 'hz-content';
 
     // ---- Scan mainContent children and build cards ----
-    // Jekyll DOM order: blockquote → hr → ol(TOC) → hr → [P(anchor) → H2 → content... → hr] × N → footer
     var children = Array.from(mainContent.children);
     var tocIndex = children.indexOf(originalTOC);
     var footerEl = mainContent.querySelector('.site-footer');
 
     // Elements before TOC (blockquote, hr) → keep as-is in contentArea
     var headerElements = [];
-    var itemElements = [];  // collected elements for current card
+    var itemElements = [];
     var cards = [];
     var collecting = false;
 
     for (var i = tocIndex + 1; i < children.length; i++) {
       var child = children[i];
 
-      // Stop at footer
       if (child === footerEl) break;
 
-      // Skip HR separators (they delineate items, not content)
       if (child.tagName === 'HR') {
-        // Flush current card if any
         if (itemElements.length > 0) {
           cards.push(itemElements);
           itemElements = [];
@@ -130,16 +150,13 @@
         continue;
       }
 
-      // Skip empty P that only contains an anchor <a id="item-N"></a>
       if (child.tagName === 'P' && child.textContent.trim() === '') {
         continue;
       }
 
-      // Detect article H2 (contains external link)
       var isArticleH2 = child.tagName === 'H2' && child.querySelector('a[href^="http"]');
 
       if (isArticleH2) {
-        // Flush previous card
         if (itemElements.length > 0) {
           cards.push(itemElements);
           itemElements = [];
@@ -147,29 +164,23 @@
         itemElements.push(child);
         collecting = true;
       } else if (collecting) {
-        // Content belonging to current article
         itemElements.push(child);
       }
-      // Elements between TOC and first H2 (shouldn't exist normally) are ignored
     }
-    // Flush last card
     if (itemElements.length > 0) {
       cards.push(itemElements);
     }
 
     // ---- Assemble contentArea ----
-    // 1. Header elements (blockquote)
     for (var h = 0; h < tocIndex; h++) {
       if (children[h].tagName !== 'HR') {
         contentArea.appendChild(children[h]);
       }
     }
 
-    // 2. Hidden original TOC
     originalTOC.classList.add('hz-original-toc');
     contentArea.appendChild(originalTOC);
 
-    // 3. Cards — fallback: if H2 lacks id="item-N" (old articles), set it on the card
     cards.forEach(function (group, idx) {
       var card = document.createElement('div');
       card.className = 'hz-item-card';
@@ -182,21 +193,19 @@
       contentArea.appendChild(card);
     });
 
-    // 4. Footer stays in mainContent (outside layout)
-    // layout = sidebar + contentArea
     layout.appendChild(sidebar);
     layout.appendChild(contentArea);
 
-    // Clear mainContent and rebuild: layout + footer
     while (mainContent.firstChild) mainContent.removeChild(mainContent.firstChild);
     mainContent.appendChild(layout);
     if (footerEl) mainContent.appendChild(footerEl);
 
-    // Mobile toggle
+    // ---- Mobile toggle button ----
     var toggleBtn = document.createElement('button');
     toggleBtn.className = 'hz-sidebar-toggle';
     toggleBtn.innerHTML = '📑';
     toggleBtn.title = '目录';
+    toggleBtn.setAttribute('aria-label', '打开目录');
     document.body.appendChild(toggleBtn);
 
     var backdrop = document.createElement('div');
@@ -204,18 +213,47 @@
     backdrop.id = 'hz-backdrop';
     document.body.appendChild(backdrop);
 
+    // Toggle handlers
     toggleBtn.addEventListener('click', function () {
-      sidebar.classList.toggle('hz-mobile-open');
-      backdrop.classList.toggle('hz-mobile-open');
+      if (sidebar.classList.contains('hz-mobile-open')) {
+        closeSidebar(sidebar, backdrop);
+      } else {
+        openSidebar(sidebar, backdrop);
+      }
     });
+
+    closeBtn.addEventListener('click', function () {
+      closeSidebar(sidebar, backdrop);
+    });
+
     backdrop.addEventListener('click', function () {
-      sidebar.classList.remove('hz-mobile-open');
-      backdrop.classList.remove('hz-mobile-open');
+      closeSidebar(sidebar, backdrop);
     });
+
+    // Close sidebar on TOC link click (mobile)
     tocList.addEventListener('click', function (e) {
       if (e.target.closest('a')) {
-        sidebar.classList.remove('hz-mobile-open');
-        backdrop.classList.remove('hz-mobile-open');
+        closeSidebar(sidebar, backdrop);
+      }
+    });
+
+    // Swipe right to close sidebar on mobile
+    var touchStartX = 0;
+    sidebar.addEventListener('touchstart', function (e) {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    sidebar.addEventListener('touchmove', function (e) {
+      var dx = e.touches[0].clientX - touchStartX;
+      if (dx < -60) {
+        closeSidebar(sidebar, backdrop);
+      }
+    }, { passive: true });
+
+    // Close sidebar on Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && sidebar.classList.contains('hz-mobile-open')) {
+        closeSidebar(sidebar, backdrop);
       }
     });
 
@@ -240,7 +278,10 @@
           var section = sections.find(function (s) { return s.el === entry.target; });
           if (section) {
             section.link.classList.add('hz-active');
-            section.link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            // Only auto-scroll TOC on desktop (sidebar visible)
+            if (!isMobile()) {
+              section.link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
           }
         }
       });
