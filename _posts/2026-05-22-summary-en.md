@@ -16,7 +16,7 @@ lang: en
 
 ---
 
-## [Eli Lilly's Retatrutide Achieves 28.3% Weight Loss in Phase 3 Trial](https://www.prnewswire.com/news-releases/lillys-triple-agonist-retatrutide-delivered-powerful-weight-loss-in-pivotal-phase-3-obesity-trial-302778859.html) {: #"item-1" } ⭐️ 9.0/10
+## [Eli Lilly's Retatrutide Achieves 28.3% Weight Loss in Phase 3 Trial](https://www.prnewswire.com/news-releases/lillys-triple-agonist-retatrutide-delivered-powerful-weight-loss-in-pivotal-phase-3-obesity-trial-302778859.html) {: #item-1 } ⭐️ 9.0/10
 
 Eli Lilly announced Phase 3 TRIUMPH-1 results showing retatrutide achieved an average weight loss of 28.3% at the highest 12 mg dose over 80 weeks. The trial met primary and key secondary endpoints across all doses in adults with obesity or overweight. This represents a major breakthrough in obesity treatment, potentially surpassing current market leaders like semaglutide and tirzepatide in efficacy. The high percentage of patients achieving over 30% weight loss could significantly shift treatment paradigms for metabolic diseases. The study involved approximately 2,500 patients, with the 4 mg dose showing a 19.0% weight loss and a lower discontinuation rate due to adverse events compared to placebo. Side effects were primarily gastrointestinal, and no heart or liver safety issues were observed.
 
@@ -37,7 +37,7 @@ telegram · zaihuapd · May 22, 02:18
 
 ---
 
-## [FTC settles charges over deceptive 'Active Listening' AI marketing claims](https://simonwillison.net/2026/May/22/ftc-active-listening/#atom-everything) {: #"item-2" } ⭐️ 8.0/10
+## [FTC settles charges over deceptive 'Active Listening' AI marketing claims](https://simonwillison.net/2026/May/22/ftc-active-listening/#atom-everything) {: #item-2 } ⭐️ 8.0/10
 
 The FTC settled charges with Cox Media Group and two other firms, requiring nearly $1 million in penalties for falsely claiming their 'Active Listening' service used smart devices to listen to consumer conversations. The agency confirmed the service did not actually listen to conversations or use voice data, but instead resold email lists from data brokers. This settlement establishes a significant regulatory precedent against deceptive surveillance marketing practices and clarifies that burying consent in terms of service is illegal for invasive data collection. It also provides official confirmation that the controversial 'active listening' ad technology, as marketed, was not actually in use, helping to debunk widespread consumer fears. The FTC emphasized that clicking through mandatory terms of service does not constitute 'opt-in consent' for collecting voice data from inside consumers' homes. Furthermore, the companies failed to accurately place ads in customers' desired locations, adding to the deceptive nature of their service.
 
@@ -60,7 +60,7 @@ rss · Simon Willison · May 22, 04:48
 
 ---
 
-## [ByteDance Open-Sources 3B Unified Multimodal Model Lance](https://mp.weixin.qq.com/s/Xbfq72cr1796RZxJIs3L1A) {: #"item-3" } ⭐️ 8.0/10
+## [ByteDance Open-Sources 3B Unified Multimodal Model Lance](https://mp.weixin.qq.com/s/Xbfq72cr1796RZxJIs3L1A) {: #item-3 } ⭐️ 8.0/10
 
 ByteDance has released Lance, a lightweight 3B parameter unified multimodal model under the Apache 2.0 license. It natively integrates image and video understanding, generation, and editing capabilities within a single architecture. This release democratizes access to high-performance multimodal AI by offering a compact, open-source model that rivals larger proprietary systems. It enables developers to build complex applications involving both visual understanding and creation without managing multiple separate models. Lance utilizes a shared context and dual-stream expert architecture, employing Qwen2.5-VL for understanding tasks and Wan2.2 for generation tasks. It achieves state-of-the-art results on benchmarks like GenEval and VBench while using modality-aware positional encoding to handle sequence boundaries.
 
@@ -81,7 +81,7 @@ telegram · zaihuapd · May 22, 06:40
 
 ---
 
-## [Cloudflare Outage Report: 25-Minute Global Failure Affecting 28% Traffic](https://t.me/zaihuapd/41527) {: #"item-4" } ⭐️ 8.0/10
+## [Cloudflare Outage Report: 25-Minute Global Failure Affecting 28% Traffic](https://t.me/zaihuapd/41527) {: #item-4 } ⭐️ 8.0/10
 
 Cloudflare released a report on a global outage that lasted 25 minutes and impacted 28% of HTTP traffic. The incident was caused by a WAF configuration error during a patch for a Next.js security vulnerability. This incident highlights the risks associated with deploying urgent security patches and the cascading effects of configuration errors in critical infrastructure. It serves as a crucial lesson for DevOps and security teams about the fragility of global networks. The outage specifically affected customers using the legacy FL1 proxy with Cloudflare Managed Rulesets. The root cause was triggered while addressing CVE-2025-55182, a vulnerability related to React Server Components.
 

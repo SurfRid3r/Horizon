@@ -17,7 +17,7 @@ lang: zh
 
 ---
 
-## [内存成本现占 AI 芯片组件费用的近三分之二](https://epoch.ai/data-insights/ai-chip-component-cost-shares) {: #"item-1" } ⭐️ 8.0/10
+## [内存成本现占 AI 芯片组件费用的近三分之二](https://epoch.ai/data-insights/ai-chip-component-cost-shares) {: #item-1 } ⭐️ 8.0/10
 
 近期分析显示，内存费用现占 AI 芯片总组件成本的近三分之二。这一转变凸显了 AI 硬件制造经济结构的重大变化。 这种成本主导地位影响了整个行业的路线图和供应链，高昂的价格可能会减缓 AI 的部署。这也强调了内存制造商的关键作用，并暗示了供需平衡后未来成本降低的潜力。 成本的增加是由对高带宽内存（HBM）的需求驱动的，HBM 是一种 3D 堆叠内存架构，对于现代加速器向数千个 GPU 内核提供数据至关重要。专家认为，一旦 DRAM 供应赶上当前的需求激增，硬件成本可能会大幅下降。
 
@@ -40,7 +40,7 @@ hackernews · intelkishan · May 24, 16:31 · [社区讨论](https://news.ycombi
 
 ---
 
-## [微软开源从纸质打印件恢复的最早 DOS 源代码](https://arstechnica.com/gadgets/2026/04/microsoft-open-sources-the-earliest-dos-source-code-discovered-to-date/) {: #"item-2" } ⭐️ 8.0/10
+## [微软开源从纸质打印件恢复的最早 DOS 源代码](https://arstechnica.com/gadgets/2026/04/microsoft-open-sources-the-earliest-dos-source-code-discovered-to-date/) {: #item-2 } ⭐️ 8.0/10
 
 微软发布了已知最早版本的 DOS（即 86-DOS）源代码，这些代码是由历史学家从纸质打印件中费力恢复的。该代码最初由 Seattle Computer Products 的 Tim Paterson 开发，现已可供公众查看。 此次发布保存了计算机历史上至关重要的一环，使开发者和历史学家能够研究 IBM PC 时代的基础。它突显了早期系统的技术简洁性以及微软在软件行业占据主导地位的起源。 恢复过程非常困难，因为现代 OCR 软件难以识别数十年前的打印件，需要“DOS Disassembly Group”进行人工转录。此次发布还包括 BASIC 解释器，这是微软在操作系统之前的主要产品重点。
 
@@ -61,7 +61,7 @@ hackernews · DamnInteresting · May 24, 01:21 · [社区讨论](https://news.yc
 
 ---
 
-## [16 字节视听演示 'Wake up! 16b' 发布](https://hellmood.111mb.de/wake_up_16b_writeup.html) {: #"item-3" } ⭐️ 8.0/10
+## [16 字节视听演示 'Wake up! 16b' 发布](https://hellmood.111mb.de/wake_up_16b_writeup.html) {: #item-3 } ⭐️ 8.0/10
 
 一篇技术详解文章详细介绍了 'Wake up! 16b' 的创作过程，这是一个压缩到仅 16 字节机器码的视听演示。该发布突破了 size-coding 的界限，成功在比以往 32 字节限制更小的空间内实现了声音和图形。 这一成就被视为极端优化的杰作，激励 demoscene 社区探索底层编程的极限。它展示了富有创造力的汇编编码如何能从几乎不存在的资源中产生复杂的多媒体体验。 该演示依赖精确的汇编指令直接操作硬件寄存器，无需外部资源即可生成音频和视觉效果。它针对支持此类极简代码执行的特定架构，展示了对底层硬件的深刻理解。
 
@@ -83,7 +83,7 @@ hackernews · MaximilianEmel · May 24, 00:30 · [社区讨论](https://news.yco
 
 ---
 
-## [Armin Ronacher 倡导人工撰写 Issue 报告而非 AI 生成](https://simonwillison.net/2026/May/24/armin-ronacher/#atom-everything) {: #"item-4" } ⭐️ 8.0/10
+## [Armin Ronacher 倡导人工撰写 Issue 报告而非 AI 生成](https://simonwillison.net/2026/May/24/armin-ronacher/#atom-everything) {: #item-4 } ⭐️ 8.0/10
 
 Armin Ronacher 批评了用户提交 AI 生成 Issue 报告的趋势，认为这些报告常以自信的不准确性和伪造的最小可复现示例掩盖了真正的问题。他明确要求将 Issue 报告浓缩为简单、基于事实的人工观察，包括运行的命令、预期的结果、实际发生的情况以及确切的错误日志。 这一观点凸显了由于 indiscriminate 使用 LLM 导致的开源沟通渠道质量显著下降，这浪费了维护者调试 AI 幻觉的时间。这为开发者社区在 Bug 报告工作流中保持效率和准确性提供了重要的指导原则。 Ronacher 指出，AI 生成的报告通常包含错误的根本原因分析、基于错误类比的建议实现策略以及一长串不相关的错误类别。他认为，剥离 AI 的解读，仅展示原始的人工观察，是帮助维护者诊断和修复 Bug 的最有效方式。
 
@@ -103,7 +103,7 @@ rss · Simon Willison · May 24, 18:46
 
 ---
 
-## [APKPure 上的 Telegram 12.6.5 被植入间谍后门](https://x.com/EricParker/status/2058411298195661221) {: #"item-5" } ⭐️ 8.0/10
+## [APKPure 上的 Telegram 12.6.5 被植入间谍后门](https://x.com/EricParker/status/2058411298195661221) {: #item-5 } ⭐️ 8.0/10
 
 APKPure 上分发的 Telegram 12.6.5 恶意版本包含名为 DataCollector 的间谍后门，可窃取敏感用户数据。该恶意应用在加密后将聊天记录、通讯录和位置信息上传至特定的 C2 服务器。 这起供应链攻击通过广泛使用的第三方商店针对热门消息应用的用户，使其隐私和安全面临严重风险。这突显了从非官方来源下载应用的危险性，因为那里的验证流程比官方渠道更薄弱。 该恶意软件被注入为一个名为 classes3.dex 的 3000 多行 DEX 文件，并使用 AES-GCM 加密将数据发送至 IP 38.190.225.166。它危及广泛的数据，包括完整的聊天记录、相册、文档、GPS 定位和 SIM 卡信息。
 
