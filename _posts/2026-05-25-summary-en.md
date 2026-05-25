@@ -16,7 +16,9 @@ lang: en
 
 ---
 
-## [Constraint Decay: LLM Agents Fail in Backend Code Generation](https://arxiv.org/abs/2605.06445) {: #item-1 } ⭐️ 8.0/10
+<a id="item-1"></a>
+
+## [Constraint Decay: LLM Agents Fail in Backend Code Generation](https://arxiv.org/abs/2605.06445) ⭐️ 8.0/10
 
 A new research paper identifies 'constraint decay,' where LLM coding agents struggle to adhere to architectural rules as they accumulate during multi-file backend code generation. The study found that assertion pass rates drop by approximately 30 percentage points as architectural, ORM, and framework constraints pile up. This finding highlights a critical limitation for using AI agents in production environments, distinguishing them from their success in rapid prototyping. It suggests that while LLMs are powerful for unconstrained tasks, their reliability decreases significantly when required to maintain strict structural consistency across complex systems. The performance drop is particularly concentrated in convention-heavy frameworks, indicating that strict stylistic and structural rules challenge current models. Researchers noted that they did not fully test frontier models due to cost constraints, leaving room for investigation into whether more advanced models exhibit the same fragility.
 
@@ -38,7 +40,9 @@ hackernews · wek · May 24, 12:55 · [Discussion](https://news.ycombinator.com/
 
 ---
 
-## [Armin Ronacher Criticizes AI-Generated Issue Reports](https://simonwillison.net/2026/May/24/armin-ronacher/#atom-everything) {: #item-2 } ⭐️ 8.0/10
+<a id="item-2"></a>
+
+## [Armin Ronacher Criticizes AI-Generated Issue Reports](https://simonwillison.net/2026/May/24/armin-ronacher/#atom-everything) ⭐️ 8.0/10
 
 Armin Ronacher criticized the trend of users submitting AI-generated issue reports, arguing they obscure real problems with confident inaccuracies. He advocates for a strict, human-observed format focusing on commands, expectations, actual results, and logs to improve debugging efficiency. This highlights a growing friction point in open-source maintenance where AI-generated noise wastes developer time and hinders problem-solving. It emphasizes the need for human-centric communication to ensure technical issues are resolved accurately. Ronacher specifically noted that AI often produces fake minimal reproducible examples and incorrect root cause analyses. He proposes a four-point structure for issue reports to strip away AI-induced hallucinations and focus on raw observation.
 
@@ -50,7 +54,9 @@ rss · Simon Willison · May 24, 18:46
 
 ---
 
-## [PapersWithCode Adds Multi-Metric Support and External Paper Submissions](https://www.reddit.com/r/MachineLearning/comments/1tmawv5/paperswithcode_new_features_week_1_p/) {: #item-3 } ⭐️ 8.0/10
+<a id="item-3"></a>
+
+## [PapersWithCode Adds Multi-Metric Support and External Paper Submissions](https://www.reddit.com/r/MachineLearning/comments/1tmawv5/paperswithcode_new_features_week_1_p/) ⭐️ 8.0/10
 
 Hugging Face's revived PapersWithCode platform now supports multiple metrics per benchmark and allows submissions of papers from sources beyond arXiv. These updates were announced one week after the site's relaunch to track state-of-the-art AI performance. Multi-metric support allows researchers to evaluate models more holistically by considering factors like speed alongside accuracy, addressing a critical need for practical deployment. The revival of this platform restores a centralized resource for tracking AI progress, which is essential for the research community. The Open ASR Leaderboard now displays both Word Error Rate (WER) and Inverse Real-Time Factor (RTFx) to measure accuracy and speed, respectively. Users can submit papers from GitHub repos, blog posts, or BioRxiv, and the system will automatically enrich them with relevant tags and metadata.
 
@@ -72,7 +78,9 @@ reddit · r/MachineLearning · NielsRogge · May 24, 12:31
 
 ---
 
-## [Telegram 12.6.5 on APKPure contains spyware backdoor](https://x.com/EricParker/status/2058411298195661221) {: #item-4 } ⭐️ 8.0/10
+<a id="item-4"></a>
+
+## [Telegram 12.6.5 on APKPure contains spyware backdoor](https://x.com/EricParker/status/2058411298195661221) ⭐️ 8.0/10
 
 A repackaged version of Telegram 12.6.5 found on APKPure contains a spyware backdoor named DataCollector. This malicious code steals extensive user data, including chats, location, and files, and exfiltrates them to a specific C2 server. This supply chain attack poses a severe privacy risk to users who downloaded the app from a third-party source instead of official stores. It highlights the dangers of APK repackaging, where legitimate apps are modified to include malware without users' knowledge. The malware is injected via classes3.dex and consists of over 3,000 lines of code, encrypting stolen data using AES-GCM before transmission. The compromised data includes chat history, contacts, photos, documents, GPS location, and SIM card details sent to IP 38.190.225.166.
 

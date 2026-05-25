@@ -18,7 +18,9 @@ lang: en
 
 ---
 
-## [Anthropic's Project Glasswing Finds 10,000+ Critical Vulnerabilities](https://www.anthropic.com/research/glasswing-initial-update) {: #item-1 } ⭐️ 9.0/10
+<a id="item-1"></a>
+
+## [Anthropic's Project Glasswing Finds 10,000+ Critical Vulnerabilities](https://www.anthropic.com/research/glasswing-initial-update) ⭐️ 9.0/10
 
 Anthropic's Project Glasswing used the Claude Mythos Preview model to identify over 10,000 critical vulnerabilities in software within one month. The project achieved a 90.6% true positive rate on reviewed vulnerabilities, with partners like Cloudflare reporting a tenfold increase in discovery speed. This development shifts the cybersecurity bottleneck from discovering flaws to the human capacity for verification and patching. It highlights a critical challenge where AI-driven vulnerability discovery now outpaces the industry's ability to remediate them. The initiative scanned thousands of open-source projects and found 6,202 high-severity flaws, collaborating with approximately 50 partners. Anthropic has partnered with the Open Source Security Foundation and released the Claude Security tool to help enterprises manage this influx of vulnerabilities.
 
@@ -41,7 +43,9 @@ telegram · zaihuapd · May 23, 03:16
 
 ---
 
-## [Apple Open-Sources Corecrypto with Verified Post-Quantum Algorithms](https://security.apple.com/blog/formal-verification-corecrypto/) {: #item-2 } ⭐️ 9.0/10
+<a id="item-2"></a>
+
+## [Apple Open-Sources Corecrypto with Verified Post-Quantum Algorithms](https://security.apple.com/blog/formal-verification-corecrypto/) ⭐️ 9.0/10
 
 On May 22, Apple open-sourced its corecrypto library, featuring implementations of the post-quantum ML-KEM and ML-DSA algorithms. The release includes end-to-end formal verification proofs ensuring that both C code and optimized ARM64 assembly strictly adhere to NIST standards. This move sets a new industry standard for software assurance by applying rigorous mathematical proofs to cryptographic code running on over 2.5 billion active devices. It accelerates the adoption of quantum-resistant security by providing the community with verified, production-ready implementations and tools. Apple released custom verification tools and an Isabelle theorem prover library to allow independent experts to evaluate the proofs. The library currently secures services like iMessage and VPNs, addressing the threat of future quantum computers capable of breaking current encryption.
 
@@ -62,7 +66,9 @@ telegram · zaihuapd · May 23, 04:49
 
 ---
 
-## [Microsoft Internally Deploys Anthropic's Claude Code](https://t.me/zaihuapd/41535) {: #item-3 } ⭐️ 9.0/10
+<a id="item-3"></a>
+
+## [Microsoft Internally Deploys Anthropic's Claude Code](https://t.me/zaihuapd/41535) ⭐️ 9.0/10
 
 Microsoft is rolling out Anthropic's Claude Code to its CoreAI team and major product groups like Windows and Microsoft 365. Engineers are required to compare it against GitHub Copilot, while non-technical staff are encouraged to use it for prototyping. This move is significant because Microsoft is a primary investor in OpenAI, yet it is aggressively adopting a competitor's tool for internal use. It highlights the intense competition in the AI coding space and suggests Microsoft is benchmarking Claude Code to potentially improve or supplement its own GitHub Copilot. The directive specifically targets the CoreAI team and departments responsible for Windows, Microsoft 365, and Outlook experiences. Employees are mandated to provide feedback comparing Claude Code's capabilities directly with GitHub Copilot.
 
@@ -83,7 +89,9 @@ telegram · zaihuapd · May 23, 06:05
 
 ---
 
-## [AI demand drives memory shortage and higher consumer electronics prices](https://simonwillison.net/2026/May/22/memory-shortage/#atom-everything) {: #item-4 } ⭐️ 8.0/10
+<a id="item-4"></a>
+
+## [AI demand drives memory shortage and higher consumer electronics prices](https://simonwillison.net/2026/May/22/memory-shortage/#atom-everything) ⭐️ 8.0/10
 
 The massive demand for HBM memory in AI data centers is diverting limited manufacturing capacity from consumer memory. This shift is expected to cause significant price increases for consumer electronics like smartphones and laptops over the next few years. This supply chain bottleneck means consumers will face higher costs for essential hardware, potentially making affordable devices like cheap smartphones scarce. It highlights how the AI boom is directly impacting the broader electronics market beyond just data centers. HBM allocation is projected to rise from 2% to 20% of total wafer capacity by the end of 2026. Crucially, producing one gigabyte of HBM consumes more than three times the wafer capacity required for a gigabyte of DDR or LPDDR.
 
@@ -103,7 +111,9 @@ rss · Simon Willison · May 22, 22:01
 
 ---
 
-## [Microsoft Report Reveals OpenAI's $11.5B Quarterly Loss](https://t.me/zaihuapd/41537) {: #item-5 } ⭐️ 8.0/10
+<a id="item-5"></a>
+
+## [Microsoft Report Reveals OpenAI's $11.5B Quarterly Loss](https://t.me/zaihuapd/41537) ⭐️ 8.0/10
 
 Microsoft's latest financial report disclosed that OpenAI incurred a quarterly loss of approximately $11.5 billion, based on Microsoft's 27% stake and a $3.1 billion hit to its own net income. This loss figure is nearly three times OpenAI's revenue for the first half of the year. This massive loss highlights the extreme capital intensity required to train and run advanced AI models, raising questions about the long-term sustainability of the current AI boom. It signals that even leading AI companies face significant financial pressure despite high revenue growth. The calculation is based on Microsoft's equity method investment, where a $3.1 billion reduction in Microsoft's net income corresponds to OpenAI's losses. Microsoft has already invested $11.6 billion of its committed $13 billion into the AI startup.
 
@@ -115,7 +125,9 @@ telegram · zaihuapd · May 23, 07:40
 
 ---
 
-## [China's Daily Token Usage Surges 1000-Fold to 140 Trillion](https://t.me/zaihuapd/41542) {: #item-6 } ⭐️ 8.0/10
+<a id="item-6"></a>
+
+## [China's Daily Token Usage Surges 1000-Fold to 140 Trillion](https://t.me/zaihuapd/41542) ⭐️ 8.0/10
 
 The National Data Bureau revealed that China's daily token usage exceeded 140 trillion this March. This figure represents a staggering increase of over 1000-fold compared to the levels seen two years ago. This explosive growth highlights the rapid adoption and commercialization of large language models across China. It signals the formation of a new value system where tokens serve as a measurable and tradable unit for the AI economy. Tokens act as the smallest unit of information processed by large models, possessing characteristics that allow them to be measured, priced, and traded. The surge reflects ongoing reforms in market-oriented data allocation and the establishment of a high-quality data supply system.
 
