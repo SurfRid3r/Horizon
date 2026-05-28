@@ -65,6 +65,7 @@
         sidebar.classList.add('hz-drawer-open');
         overlay.classList.add('hz-drawer-overlay-open');
         fab.classList.add('hz-toc-fab-active');
+        document.body.classList.add('hz-body-drawer-open');
       }
 
       function closeDrawer() {
@@ -72,6 +73,7 @@
         sidebar.classList.remove('hz-drawer-open');
         overlay.classList.remove('hz-drawer-overlay-open');
         fab.classList.remove('hz-toc-fab-active');
+        document.body.classList.remove('hz-body-drawer-open');
       }
 
       fab.addEventListener('click', function() {
@@ -82,7 +84,18 @@
 
       // Close drawer when a TOC link is clicked
       sidebar.addEventListener('click', function(e) {
-        if (e.target.tagName === 'A') closeDrawer();
+        var a = e.target.closest('a');
+        if (a) closeDrawer();
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (isOpen && e.key === 'Escape') closeDrawer();
+      });
+
+      // Close on back gesture / popstate
+      window.addEventListener('popstate', function() {
+        if (isOpen) closeDrawer();
       });
     })();
     </script>
