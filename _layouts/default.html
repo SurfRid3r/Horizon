@@ -26,6 +26,14 @@
       {% endif %}
     </header>
 
+    <!-- Mobile TOC overlay -->
+    <div class="hz-drawer-overlay" id="hz-drawer-overlay"></div>
+
+    <!-- Mobile TOC floating button -->
+    <button class="hz-toc-fab" id="hz-toc-fab" aria-label="目录">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg>
+    </button>
+
     <div class="hz-layout">
       <nav class="hz-sidebar" id="hz-sidebar">
         <div class="hz-sidebar-inner">
@@ -44,5 +52,39 @@
         </footer>
       </main>
     </div>
+
+    <script>
+    (function() {
+      var fab = document.getElementById('hz-toc-fab');
+      var sidebar = document.getElementById('hz-sidebar');
+      var overlay = document.getElementById('hz-drawer-overlay');
+      var isOpen = false;
+
+      function openDrawer() {
+        isOpen = true;
+        sidebar.classList.add('hz-drawer-open');
+        overlay.classList.add('hz-drawer-overlay-open');
+        fab.classList.add('hz-toc-fab-active');
+      }
+
+      function closeDrawer() {
+        isOpen = false;
+        sidebar.classList.remove('hz-drawer-open');
+        overlay.classList.remove('hz-drawer-overlay-open');
+        fab.classList.remove('hz-toc-fab-active');
+      }
+
+      fab.addEventListener('click', function() {
+        if (isOpen) closeDrawer(); else openDrawer();
+      });
+
+      overlay.addEventListener('click', closeDrawer);
+
+      // Close drawer when a TOC link is clicked
+      sidebar.addEventListener('click', function(e) {
+        if (e.target.tagName === 'A') closeDrawer();
+      });
+    })();
+    </script>
   </body>
 </html>
